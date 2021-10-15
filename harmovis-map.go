@@ -177,6 +177,24 @@ func supplyRideCallback(clt *sxutil.SXServiceClient, sp *api.Supply) {
 	err := proto.Unmarshal(sp.Cdata.Entity, flt)
 	if err == nil {
 		log.Print(flt)
+
+		datestr := time.Now().Format("2006/01/02 15:04:05 (JST)")
+
+//		col := "3cb371" // green
+		col := "ff4c26" // orange
+
+		mm := &MapMarker2{
+			mtype:     int32(3), // depends on type of GTFS: 1 for Subway, 2, for Rail, 3 for bus
+			id:        flt.VehicleId,
+			lat:       float32(flt.Coord.Lat),
+			lon:       float32(flt.Coord.Lon),
+			angle:     flt.Angle,
+			speed:     flt.Speed,
+			passenger: int32(0),
+			etime:     datestr,
+			color: 	   col,
+		}
+/*
 		mm := &MapMarker{
 			mtype: int32(0),
 			id:    flt.VehicleId,
@@ -185,6 +203,7 @@ func supplyRideCallback(clt *sxutil.SXServiceClient, sp *api.Supply) {
 			angle: flt.Angle,
 			speed: flt.Speed,
 		}
+		*/
 		//		jsondata, err := json.Marshal(*mm)
 		//		fmt.Println("rcb",mm.GetJson())
 		mu.Lock()

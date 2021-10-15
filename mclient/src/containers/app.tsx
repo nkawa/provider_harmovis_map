@@ -501,6 +501,7 @@ class App extends Container<any,any> {
 	getEvent (socketData:any) {
 		if(this.state.playbackMode){return;}
 		const receiveData = JSON.parse(socketData);
+//		console.log(receiveData) // DEBUG
 		this.socketDataObj.push(receiveData);
 	}
 
@@ -512,7 +513,7 @@ class App extends Container<any,any> {
 		const movesbasedata = [...movesbase] // why copy !?
 		let update = 0;
 		for(let i=0; i<receiveDataArray.length; i+=1){
-			const { mtype, id, lat, lon, angle, speed, passenger, etime} = receiveDataArray[i]
+			const { mtype, id, lat, lon, angle, speed, passenger, etime, color} = receiveDataArray[i]
 			const elapsedtime = Date.parse(etime)/1000;
 			if(lat > 90 || lat < -90 || lon > 180 || lon < -180){
 				console.log({lon,lat})
@@ -521,8 +522,8 @@ class App extends Container<any,any> {
 			const idx = movesbasedata.findIndex(x=>(x.mtype===mtype && x.id===id));
 			if(idx<0){
 				const rgb = Math.floor( Math.random() * 3 );
-				const color = [0,0,0,255];
-				color[rgb] = 255;
+//				const color = [0,0,0,255];
+				const col = [parseInt(color.substr(0,2),16),parseInt(color.substr(2,2),16),parseInt(color.substr(4,2),16)]
 				movesbasedata.push({
 					mtype, id,
 					operation: [{
@@ -530,7 +531,7 @@ class App extends Container<any,any> {
 						position: [lon, lat, 0],
 						angle, speed,
 						optElevation:[passenger],
-						color,
+						color:col,
 					}]
 				});
 				update+=1

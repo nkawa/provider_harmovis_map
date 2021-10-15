@@ -128,7 +128,7 @@ function color2array(col:number) : number[] {
 function startRecivedData() {
 
     socket.on('event', (str: string) => {
-        //console.log('event:' + str)
+//        console.log('event:' + str)
         const payload = str;
         worker.postMessage({
             type: 'RECEIVED_EVENT',
